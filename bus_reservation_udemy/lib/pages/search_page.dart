@@ -12,6 +12,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   String? fromCity, toCity;
   DateTime? departureDate;
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,6 +20,7 @@ class _SearchPageState extends State<SearchPage> {
         title: const Text('Search'),
       ),
       body: Form(
+        key: _formKey,
         child: Center(
           child: ListView(
           shrinkWrap: true,
@@ -67,16 +69,29 @@ class _SearchPageState extends State<SearchPage> {
                 toCity = value;
               },
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextButton(
-                    onPressed: _selectDate,
-                    child: const Text('Select Departure Date'),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                      onPressed: _selectDate,
+                      child: const Text('Select Departure Date'),
+                  ),
+                  Text(departureDate==null ? 'No Date chosen' : getFormattedDate(departureDate!, pattern: 'EEE MMM dd, yyyy')),
+                ],
+              ),
+            ),
+            Center(
+              child: SizedBox(
+                width: 150,
+                child: ElevatedButton(
+                    onPressed: _search,
+                    child: const Text('SEARCH'),
                 ),
-                Text(departureDate==null ? 'No Date chosen' : getFormattedDate(departureDate!, pattern: 'EEE MMM dd, yyyy')),
-              ],
+              ),
             )
+
           ],
         ),
           ),
@@ -95,6 +110,17 @@ class _SearchPageState extends State<SearchPage> {
       setState(() {
         departureDate = selectedDate;
       });
+    }
+  }
+
+  void _search() {
+    if(departureDate == null){
+      ScaffoldMessenger.of(context)
+      .showSnackBar(SnackBar(content: Text('Please select a departure date')));
+      return;
+    }
+    if(_formKey.currentState!.validate()){
+
     }
   }
 }
