@@ -70,33 +70,31 @@ class DummyDataSource extends DataSource{
   }
 
   @override
-  Future<BusRoute?> getRouteByCityFromAndCityTo(String cityFrom, String cityTo) async{
+  Future<BusRoute?> getRouteByCityFromAndCityTo(String cityFrom, String cityTo) async {
     BusRoute? route;
     try {
       final route = TempDB.tableRoute.firstWhere((element) =>
       element.cityFrom == cityFrom && element.cityTo == cityTo);
       return route;
-    }on StateError catch(error){
+    } on StateError catch (error) {
       return null;
-
+    }
+  }
+  @override
+    Future<BusRoute?> getRouteByRouteName(String routeName) {
+      // TODO: implement getRouteByRouteName
+      throw UnimplementedError();
     }
 
-  @override
-  Future<BusRoute?> getRouteByRouteName(String routeName) {
-    // TODO: implement getRouteByRouteName
-    throw UnimplementedError();
-  }
+    @override
+    Future<List<BusSchedule>> getSchedulesByRouteName(String routeName) async{
+      return TempDB.tableSchedule.where((schedule) =>
+      schedule.busRoute.routeName == routeName).toList();
+    }
 
-  @override
-  Future<List<BusSchedule>> getSchedulesByRouteName(String routeName) {
-    // TODO: implement getSchedulesByRouteName
-    throw UnimplementedError();
+    @override
+    Future<AuthResponseModel?> login(AppUser user) {
+      // TODO: implement login
+      throw UnimplementedError();
+    }
   }
-
-  @override
-  Future<AuthResponseModel?> login(AppUser user) {
-    // TODO: implement login
-    throw UnimplementedError();
-  }
-  
-}
