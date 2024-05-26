@@ -53,13 +53,13 @@ class SearchResultPage extends StatelessWidget {
 class ScheduleItemView extends StatelessWidget {
   final String date;
   final BusSchedule schedule;
-  const ScheduleItemView(Key? key, required this.schedule, required this.date)
+  const ScheduleItemView({Key? key, required this.schedule, required this.date})
   : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () => Navigator.pushNamed(context, routeNameSeatPlanPage, arguments: [schedule, date]),
       child: Card(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,17 +76,17 @@ class ScheduleItemView extends StatelessWidget {
                 children: [
                   Text('From ${schedule.busRoute.cityFrom}',
                     style: const TextStyle(
-                        fontSize: 17
+                        fontSize: 17,
                     ),
                   ),
                   Text('To ${schedule.busRoute.cityFrom}',
                     style: const TextStyle(
-                        fontSize: 17
+                        fontSize: 17,
                     ),
                   ),
                 ],
               ),
-            )
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -94,18 +94,17 @@ class ScheduleItemView extends StatelessWidget {
                 children: [
                   Text('Departure Time: ${schedule.departureTime}',
                     style: const TextStyle(
-                        fontSize: 17
+                        fontSize: 17,
                     ),
                   ),
                   Text('Total Seat: ${schedule.bus.totalSeat}',
                     style: const TextStyle(
-                        fontSize: 17
+                        fontSize: 17,
                     ),
                   ),
                 ],
               ),
             )
-      
           ],
         )
       ),
