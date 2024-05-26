@@ -1,3 +1,4 @@
+import 'package:bus_reservation_udemy/models/bus_schedule.dart';
 import 'package:bus_reservation_udemy/providers/app_data_provider.dart';
 import 'package:bus_reservation_udemy/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -23,17 +24,91 @@ class SearchResultPage extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         children: [
           Text('Showing results for ${route.cityFrom} to ${route.cityTo} on $departureDate',
-            style: const TextStyle(fontSize: 18) ,)
-        ],
-        Column(
+            style: const TextStyle(fontSize: 18) ,
+    ),
+        Consumer<AppDataProvider>(
+          builder: (context, provider, _) => FutureBuilder<List<BusSchedule>>(
+            future: provider.getSchedulesByRouteName(route.routeName),
+            builder: (context, snapshot){
+              if(snapshot.hasData){
+                final scheduleList = snapshot.data!;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: scheduleList.map((schedule) => ScheduleItemView(schedule: schedule, date: departureDate)).toList(),
+                );
+              }
+              if(snapshot.hasError){
+                return const Text('Failed to fetch data');
+              }
+              return const Text('Please wait');
+            }
+          ),
+        ),
+      ],
+    ),
+    );
+  }
+}
+
+class ScheduleItemView extends StatelessWidget {
+  final String date;
+  final BusSchedule schedule;
+  const ScheduleItemView(Key? key, required this.schedule, required this.date)
+  : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {},
+      child: Card(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: provider.scheduleList.map((schedule) => ListFile(
-            title:Text(schedule.bus.busName),
-            subtitle: Text(schedule.bus.busType),
-            trailing: Text('$currency${schedule.ticketPrice}'),
-          )).toList(),
+          children: [
+            ListTile(
+              title:Text(schedule.bus.busName),
+              subtitle: Text(schedule.bus.busType),
+              trailing: Text('$currency${schedule.ticketPrice}'),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text('From ${schedule.busRoute.cityFrom}',
+                    style: const TextStyle(
+                        fontSize: 17
+                    ),
+                  ),
+                  Text('To ${schedule.busRoute.cityFrom}',
+                    style: const TextStyle(
+                        fontSize: 17
+                    ),
+                  ),
+                ],
+              ),
+            )
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text('Departure Time: ${schedule.departureTime}',
+                    style: const TextStyle(
+                        fontSize: 17
+                    ),
+                  ),
+                  Text('Total Seat: ${schedule.bus.totalSeat}',
+                    style: const TextStyle(
+                        fontSize: 17
+                    ),
+                  ),
+                ],
+              ),
+            )
+      
+          ],
         )
-      )
+      ),
     );
   }
 }
