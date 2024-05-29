@@ -2,6 +2,7 @@ import 'package:bus_reservation_udemy/datasource/data_source.dart';
 import 'package:bus_reservation_udemy/datasource/dummy_data_source.dart';
 import 'package:flutter/material.dart';
 
+import '../models/bus_reservation.dart';
 import '../models/bus_route.dart';
 import '../models/bus_schedule.dart';
 
@@ -18,5 +19,8 @@ class AppDataProvider extends ChangeNotifier {
 
   Future<List<BusSchedule>> getSchedulesByRouteName(String routeName) async {
     return _dataSource.getSchedulesByRouteName(routeName);
+  }
+  Future<List<BusReservation>> getReservationsByScheduleAndDepartureDate(int scheduleId, String departureDate){
+    return _dataSource.getReservationsByScheduleAndDepartureDate(scheduleId, departureDate);
   }
 }
