@@ -84,7 +84,12 @@ class _SeatPlanPageState extends State<SeatPlanPage> {
               child: SingleChildScrollView(
                 child: SeatPlanView(
                   onSeatSelected: (value, seat){
-
+                    if(value){
+                      selectedSeats.add(seat);
+                    }else{
+                      selectedSeats.remove(seat);
+                    }
+                    selectedSeatStringNotifier.value = selectedSeats.join(',');
                   },
                   totalSeatBooked: totalSeatBooked,
                   bookedSeatNumbers: bookedSeatNumbers,

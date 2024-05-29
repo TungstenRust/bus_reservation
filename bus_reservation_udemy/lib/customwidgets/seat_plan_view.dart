@@ -64,7 +64,7 @@ class SeatPlanView extends StatelessWidget {
                               isBooked: bookedSeatList.contains(seatArrangement[i][j]),
                               onSelect: (value){
                                 onSeatSelected(value, seatArrangement[i][j]);
-                              }
+                              },
                           ),
                           if(isBusinessClass && j == 0)
                             const SizedBox(width: 24,),
@@ -105,7 +105,10 @@ class _SeatState extends State<Seat> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-
+        setState(() {
+          selected = !selected;
+        });
+        widget.onSelect(selected);
       },
       child: Container(
         margin: const EdgeInsets.all(8),
