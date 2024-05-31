@@ -32,6 +32,11 @@ class MyApp extends StatelessWidget {
         routeNameSearchResultPage: (context) => const SearchResultPage(),
         routeNameSeatPlanPage: (context) => const SeatPlanPage(),
         routeNameBookingConfirmationPage: (context) => const BookingConfirmationPage(),
+        routeNameAddBusPage:(context) => const AddBusPage(),
+        routeNameAddRoutePage:(context) => const AddRoutePage(),
+        routeNameAddSchedulePage:(context) => const AddSchedulePage(),
+        routeNameReservationPage:(context) => const ReservationPage(),
+        routeNameLoginPage: (context) => const LoginPage(),
       } ,
     );
   }
