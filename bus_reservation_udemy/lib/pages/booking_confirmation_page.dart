@@ -1,7 +1,11 @@
+import 'package:bus_reservation_udemy/models/bus_reservation.dart';
 import 'package:bus_reservation_udemy/models/bus_schedule.dart';
+import 'package:bus_reservation_udemy/models/customer.dart';
+import 'package:bus_reservation_udemy/providers/app_data_provider.dart';
 import 'package:bus_reservation_udemy/utils/constants.dart';
 import 'package:bus_reservation_udemy/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BookingConfirmationPage extends StatefulWidget {
   const BookingConfirmationPage({super.key});
@@ -163,17 +167,44 @@ class _BookingConfirmationPageState extends State<BookingConfirmationPage> {
       ),
     );
   }
-
-  void _confirmBooking(){
-    if(_formKey.currentState!.validate()){
-
-    }
-  }
   @override
   void dispose() {
     nameController.dispose();
     emailController.dispose();
     mobileController.dispose();
     super.dispose();
+  }
+  void _confirmBooking(){
+    if(_formKey.currentState!.validate()){
+      final customer = Customer(
+          customerName: nameController.text,
+          mobile: mobileController.text,
+          email: emailController.text,
+      );
+      final reservation = BusReservation(
+          customer: customer,
+          busSchedule: schedule,
+          timestamp: DateTime.now().millisecondsSinceEpoch,
+          departureDate: departureDate,
+          totalSeatBooked: totalSeatsBooked,
+          seatNumbers: seatNumbers,
+          reservationStatus: reservationActive,
+          totalPrice: getGrandTotal( schedule.discount, totalSeatsBooked,
+              schedule.ticketPrice, schedule.processingFee)
+      );
+      Provider.of<AppDataProvider>(context, listen:false)
+      .addReservation(reservation)
+      .then((response){
+        if(response.responseStatus == ResponseStatus.SAVED){
+          showMsg(context, response.message);
+          Navigator.popUntil(context, ModalRoute.withName(routeNameHome));
+        }else{
+          showMsg(context, response.message);
+        }
+      })
+      .catchError((error){
+        showMsg(context, 'Could not save');
+      });
+    }
   }
 }
