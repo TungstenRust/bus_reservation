@@ -34,6 +34,9 @@ class _SeatPlanPageState extends State<SeatPlanPage> {
   _getData() async{
     final resList = await Provider.of<AppDataProvider>(context, listen: false)
         .getReservationsByScheduleAndDepartureDate(schedule.scheduleId!, departureDate);
+    setState(() {
+      isDataLoading = false;
+    });
     List<String> seats = [];
     for(final res in resList){
       totalSeatBooked += res.totalSeatBooked;
@@ -94,7 +97,7 @@ class _SeatPlanPageState extends State<SeatPlanPage> {
                 style: const TextStyle(fontSize: 16)
             ),
           ),
-          Expanded(
+          if(!isDataLoading)Expanded(
               child: SingleChildScrollView(
                 child: SeatPlanView(
                   onSeatSelected: (value, seat){
