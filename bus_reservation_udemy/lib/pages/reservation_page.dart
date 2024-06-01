@@ -1,6 +1,8 @@
 import 'package:bus_reservation_udemy/customwidgets/reservation_item_body_view.dart';
 import 'package:bus_reservation_udemy/customwidgets/reservation_item_header_view.dart';
+import 'package:bus_reservation_udemy/customwidgets/search_box.dart';
 import 'package:bus_reservation_udemy/providers/app_data_provider.dart';
+import 'package:bus_reservation_udemy/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,8 +27,11 @@ class _ReservationPageState extends State<ReservationPage> {
   }
 
   _getData() async{
-   await Provider.of<AppDataProvider>(context, listen: false).getAllReservations();
-   items = Provider.of<AppDataProvider>(context, listen: false).getExpansionItems();
+   final reservations = await Provider.of<AppDataProvider>(context, listen: false).getAllReservations();
+   items = Provider.of<AppDataProvider>(context, listen: false).getExpansionItems(reservations);
+   setState(() {
+
+   });
   }
 
   @override
@@ -38,6 +43,9 @@ class _ReservationPageState extends State<ReservationPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            SearchBox(onSubmit: (value){
+              _search(value);
+            }),
             ExpansionPanelList(
               expansionCallback: (index, isExpanded){
                 setState(() {
@@ -54,5 +62,16 @@ class _ReservationPageState extends State<ReservationPage> {
         ),
       ),
     );
+  }
+
+  void _search(String value) async{
+  final data = await Provider.of<AppDataProvider>(context, listen: false).getReservationsByMobile(value);
+    if(data.isEmpty){
+      showMsg(context, 'No record found');
+      return;
+    }
+    setState(() {
+      items = Provider.of<AppDataProvider>(context, listen: false).getExpansionItems(data);
+    });
   }
 }
