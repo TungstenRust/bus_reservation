@@ -12,9 +12,9 @@ import '../utils/constants.dart';
 
 class DummyDataSource extends DataSource{
   @override
-  Future<ResponseModel> addBus(Bus bus) {
-    // TODO: implement addBus
-    throw UnimplementedError();
+  Future<ResponseModel> addBus(Bus bus) async {
+      TempDB.tableBus.add(bus);
+      return ResponseModel(responseStatus: ResponseStatus.SAVED, statusCode: 200, message: 'Bus Saved', object: {});
   }
 
   @override
@@ -25,9 +25,9 @@ class DummyDataSource extends DataSource{
   }
 
   @override
-  Future<ResponseModel> addRoute(BusRoute busRoute) {
-    // TODO: implement addRoute
-    throw UnimplementedError();
+  Future<ResponseModel> addRoute(BusRoute busRoute) async {
+    TempDB.tableRoute.add(busRoute);
+    return ResponseModel(responseStatus: ResponseStatus.SAVED, statusCode: 200, message: 'Route Saved', object: {});
   }
 
   @override
