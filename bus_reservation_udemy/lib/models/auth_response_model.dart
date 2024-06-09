@@ -12,4 +12,12 @@ class AuthResponseModel {
     required this.logInTime,
     required this.expirationDuration,
   });
+
+  factory AuthResponseModel.fromJson(Map<String, dynamic> json)=> AuthResponseModel(
+      statusCode: json['statusCode'],
+      message: json['message'],
+      accessToken: json['accessToken'],
+      logInTime: json ['logInTime'],
+      expirationDuration: json['expirationDuration'],
+  );
 }
